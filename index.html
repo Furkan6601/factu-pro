@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FactuPro - Générateur de factures</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; }
+    form { max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 4px; }
+    button { margin-top: 15px; padding: 10px; background: #007bff; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    #facture { margin-top: 20px; padding: 15px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>🧾 FactuPro - Générateur de factures</h1>
+  <form id="factureForm">
+    <h3>Informations de l'entreprise</h3>
+    <label>Nom de l'entreprise : <input type="text" id="entreprise" required></label>
+    <label>Adresse : <textarea id="adresse" required></textarea></label>
+
+    <h3>Informations du client</h3>
+    <label>Nom du client : <input type="text" id="client" required></label>
+    <label>Adresse client : <textarea id="adresseClient" required></textarea></label>
+
+    <h3>Détails de la facture</h3>
+    <label>Description : <input type="text" id="description" required></label>
+    <label>Quantité : <input type="number" id="quantite" value="1" required></label>
+    <label>Prix unitaire (€) : <input type="number" id="prix" value="0" required></label>
+
+    <button type="submit">Générer la facture</button>
+  </form>
+
+  <div id="facture"></div>
+
+  <script>
+    document.getElementById("factureForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let entreprise = document.getElementById("entreprise").value;
+      let adresse = document.getElementById("adresse").value;
+      let client = document.getElementById("client").value;
+      let adresseClient = document.getElementById("adresseClient").value;
+      let description = document.getElementById("description").value;
+      let quantite = document.getElementById("quantite").value;
+      let prix = document.getElementById("prix").value;
+      let total = quantite * prix;
+
+      let html = `
+        <h2>Facture</h2>
+        <p><b>${entreprise}</b><br>${adresse}</p>
+        <hr>
+        <p><b>Client :</b><br>${client}<br>${adresseClient}</p>
+        <hr>
+        <p><b>Description :</b> ${description}</p>
+        <p><b>Quantité :</b> ${quantite}</p>
+        <p><b>Prix unitaire :</b> ${prix} €</p>
+        <h3>Total : ${total} €</h3>
+      `;
+      document.getElementById("facture").innerHTML = html;
+    });
+  </script>
+</body>
+</html>
