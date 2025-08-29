@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>FactuPro — Devis & Factures</title>
+  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1117;
+    --card:#151A23;
+    --muted:#9aa4b2;
+    --text:#e5e7eb;
+    --text-2:#c7cbd3;
+    --primary:#4f46e5;
+    --primary-2:#06b6d4;
+    --ring:rgba(79,70,229,.35);
+    --ok:#10b981;
+    --warn:#f59e0b;
+    --danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1100px;margin:0 auto;padding:0 20px}
+  /* NAV */
+  .nav{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);
+       background:linear-gradient(135deg, rgba(79,70,229,.15), rgba(6,182,212,.10));
+       border-bottom:1px solid rgba(255,255,255,.06);z-index:50}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px}
+  .brand img{width:36px;height:36px;border-radius:12px;box-shadow:0 4px 18px rgba(6,182,212,.35)}
+  .links{display:flex;align-items:center;gap:22px;font-weight:600}
+  .links a{opacity:.85}.links a.active,.links a:hover{opacity:1}
+  .cta{padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;
+       box-shadow:0 8px 30px rgba(6,182,212,.35)}
+  /* CARDS / LAYOUT */
+  .wrap{padding:28px 0}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:18px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+  .muted{color:var(--text-2)}
+  .btn{display:inline-flex;align-items:center;gap:10px;border-radius:12px;padding:10px 14px;font-weight:600;border:1px solid rgba(255,255,255,.1);background:#0d1219;color:var(--text)}
+  .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border:none;color:#fff}
+  .grid{display:grid;gap:16px}
+  @media(max-width:900px){.links{display:none}}
+</style>
+
+  <style>
+    .grid-2{grid-template-columns:1.2fr .8fr}
+    label{font-size:13px;color:var(--text-2)}
+    input,select,textarea{width:100%;padding:12px;border-radius:12px;background:#0d1219;border:1px solid rgba(255,255,255,.08);color:var(--text)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    table{width:100%;border-collapse:separate;border-spacing:0 10px;font-size:14px}
+    th{color:var(--text-2);text-align:left;padding:6px}
+    td{background:#0d1219;border:1px solid rgba(255,255,255,.08);padding:8px;border-radius:12px}
+    td input{background:transparent;border:none;outline:none}
+    .recap .line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    @media(max-width:960px){.grid-2{grid-template-columns:1fr}}
+    @media print{ .nav,.no-print{display:none!important} body{background:white;color:#111} .card{box-shadow:none} td{background:#fff;border:1px solid #eee} }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="logo.png" alt="logo">FactuPro</a>
+      <div class="links" id="navLinks">
+        <a href="index.html">Accueil</a>
+        <a class="active" href="factures.html">Factures</a>
+        <a href="abonnements.html">Abonnements</a>
+        <a href="parametres.html">Paramètres</a>
+        <a class="cta" href="factures.html">Créer</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container wrap">
+    <h1 style="margin:0 0 12px">Créer un <span id="typeLabel">devis</span></h1>
+    <div class="grid grid-2">
+      <section class="card">
+        <div class="row">
+          <div>
+            <label>Type</label>
+            <select id="docType" onchange="toggleType()">
+              <option value="devis" selected>Devis</option>
+              <option value="facture">Facture</option>
+            </select>
+          </div>
+          <div>
+            <label>N° document</label>
+            <input id="numero" placeholder="DEV-2025-001" value="DEV-2025-001">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Date d’émission</label>
+            <input id="dateEmis" type="date">
+          </div>
+          <div>
+            <label>Date d’échéance</label>
+            <input id="dateEcheance" type="date">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Client</label>
+            <input id="client" placeholder="Nom du client">
+          </div>
+          <div>
+            <label>Projet / Référence</label>
+            <input id="projet" placeholder="Chantier — Pose de dalles">
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="pill">Lignes</div>
+          <table id="table">
+            <thead>
+              <tr><th style="width:44%">Désignation</th><th>Qté</th><th>P.U. (€)</th><th>TVA %</th><th>Total (€)</th><th class="no-print"></th></tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+          <div class="actions no-print">
+            <button class="btn" onclick="addLine()">+ Ligne</button>
+            <button class="btn" onclick="addPreset()">+ Main-d’œuvre 1h</button>
+            <button class="btn" onclick="addLot()">+ Lot (matériaux)</button>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:14px">
+          <div>
+            <label>Remise (%)</label>
+            <input id="remise" type="number" step="0.01" value="0" oninput="compute()">
+          </div>
+          <div>
+            <label>Acompte (€)</label>
+            <input id="acompt" type="number" step="0.01" value="0" oninput="compute()">
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <label>Notes / Conditions</label>
+          <textarea id="notes" rows="3" placeholder="Conditions de paiement, pénalités de retard, assurance décennale…"></textarea>
+        </div>
+      </section>
+
+      <aside class="card recap">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="pill" id="statusPill">Brouillon</div>
+          <div class="actions no-print">
+            <button class="btn" onclick="toInvoice()">→ Facture</button>
+            <button class="btn" onclick="markPaid()">✔ Payé</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <div class="line"><span>Sous-total HT</span><b id="sousTotal">0,00 €</b></div>
+          <div class="line"><span>TVA totale</span><b id="tvaTotal">0,00 €</b></div>
+          <div class="line"><span>Remise</span><b id="remiseVal">0,00 €</b></div>
+          <div class="line"><span>Total TTC</span><b id="ttc">0,00 €</b></div>
+          <div class="line"><span>Acompte</span><b id="acomptVal">0,00 €</b></div>
+          <div class="line" style="font-size:20px;font-weight:700"><span>Reste à payer</span><b id="reste">0,00 €</b></div>
+        </div>
+
+        <div class="actions no-print" style="margin-top:12px">
+          <button class="btn primary" onclick="window.print()">Imprimer / PDF</button>
+          <button class="btn" onclick="resetDoc()">Réinitialiser</button>
+        </div>
+        <p class="muted" style="margin-top:8px">Astuce : utilisez “Imprimer” pour sauvegarder en PDF depuis votre navigateur.</p>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const tbody = document.getElementById('tbody');
+    function euro(n){return (n||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}
+    function addLine(values={}){
+      const tr=document.createElement('tr');
+      tr.innerHTML = `
+        <td><input placeholder="Désignation" value="${values.label or ''}" oninput="compute()"></td>
+        <td style="width:90px"><input type="number" step="0.01" value="${values.qty or 1}" oninput="compute()"></td>
+        <td style="width:120px"><input type="number" step="0.01" value="${values.price or 0}" oninput="compute()"></td>
+        <td style="width:90px"><input type="number" step="0.01" value="${(values.vat if 'vat' in values else 20)}" oninput="compute()"></td>
+        <td style="width:130px" class="lineTotal">0,00 €</td>
+        <td class="no-print" style="width:40px;text-align:center"><button class="btn" style="padding:6px 8px" onclick="this.closest('tr').remove();compute()">✕</button></td>`;
+      tbody.appendChild(tr); compute();
+    }
+    function addPreset(){ addLine({label:'Main-d’œuvre',qty:1,price:45,vat:10}); }
+    function addLot(){ addLine({label:'Matériaux — ciment, sable, gravier',qty:1,price:180,vat:20}); }
+
+    function compute(){
+      let sous=0, tva=0;
+      [...tbody.querySelectorAll('tr')].forEach(tr=>{
+        const [label,qty,price,vat] = [...tr.querySelectorAll('input')].map(i=>i.type==='number'?parseFloat(i.value||0):i.value);
+        const ht = qty*price;
+        const t = ht*(parseFloat(vat||0)/100);
+        tr.querySelector('.lineTotal').textContent = euro(ht+t);
+        sous += ht; tva += t;
+      });
+      const remisePct = parseFloat(document.getElementById('remise').value||0);
+      const remiseVal = sous * (remisePct/100);
+      const ttc = (sous - remiseVal) + tva;
+      const acompte = parseFloat(document.getElementById('acompt').value||0);
+      const reste = Math.max(ttc - acompte,0);
+      document.getElementById('sousTotal').textContent = euro(sous);
+      document.getElementById('tvaTotal').textContent   = euro(tva);
+      document.getElementById('remiseVal').textContent  = `-${euro(remiseVal)}`;
+      document.getElementById('ttc').textContent        = euro(ttc);
+      document.getElementById('acomptVal').textContent  = `-${euro(acompte)}`;
+      document.getElementById('reste').textContent      = euro(reste);
+    }
+    function toggleType(){
+      const sel=document.getElementById('docType').value;
+      document.getElementById('typeLabel').textContent= sel==='facture'?'facture':'devis';
+      document.getElementById('numero').value = sel==='facture' ? 'FAC-2025-001' : 'DEV-2025-001';
+      document.getElementById('statusPill').textContent = 'Brouillon';
+    }
+    function toInvoice(){ document.getElementById('docType').value='facture'; toggleType(); }
+    function markPaid(){ document.getElementById('statusPill').textContent='Payé'; }
+    function resetDoc(){ tbody.innerHTML=''; addLine(); document.getElementById('remise').value=0; document.getElementById('acompt').value=0; compute(); }
+    (function init(){
+      const d=new Date().toISOString().slice(0,10);
+      document.getElementById('dateEmis').value=d;
+      document.getElementById('dateEcheance').value=d;
+      addLine({label:'Pose de dalles',qty:1,price:1800,vat:20});
+      compute();
+    })();
+  </script>
+</body>
+</html>

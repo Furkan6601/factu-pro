@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>FactuPro — Abonnements</title>
+  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1117;
+    --card:#151A23;
+    --muted:#9aa4b2;
+    --text:#e5e7eb;
+    --text-2:#c7cbd3;
+    --primary:#4f46e5;
+    --primary-2:#06b6d4;
+    --ring:rgba(79,70,229,.35);
+    --ok:#10b981;
+    --warn:#f59e0b;
+    --danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1100px;margin:0 auto;padding:0 20px}
+  /* NAV */
+  .nav{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);
+       background:linear-gradient(135deg, rgba(79,70,229,.15), rgba(6,182,212,.10));
+       border-bottom:1px solid rgba(255,255,255,.06);z-index:50}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px}
+  .brand img{width:36px;height:36px;border-radius:12px;box-shadow:0 4px 18px rgba(6,182,212,.35)}
+  .links{display:flex;align-items:center;gap:22px;font-weight:600}
+  .links a{opacity:.85}.links a.active,.links a:hover{opacity:1}
+  .cta{padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;
+       box-shadow:0 8px 30px rgba(6,182,212,.35)}
+  /* CARDS / LAYOUT */
+  .wrap{padding:28px 0}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:18px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+  .muted{color:var(--text-2)}
+  .btn{display:inline-flex;align-items:center;gap:10px;border-radius:12px;padding:10px 14px;font-weight:600;border:1px solid rgba(255,255,255,.1);background:#0d1219;color:var(--text)}
+  .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border:none;color:#fff}
+  .grid{display:grid;gap:16px}
+  @media(max-width:900px){.links{display:none}}
+</style>
+
+  <style>
+    .hero{padding:36px 0 8px}
+    h1{margin:0 0 8px}
+    .lead{color:var(--text-2)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+    .price{font-size:34px;font-weight:800;margin:6px 0}
+    .badge{position:absolute;top:12px;right:12px;background:rgba(79,70,229,.15);border:1px solid rgba(79,70,229,.3);color:#c7d2fe;padding:6px 10px;border-radius:999px;font-weight:600}
+    .card{position:relative}
+    .list{list-style:none;margin:10px 0 14px;padding:0}
+    .list li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
+    .ok{color:#86efac;font-weight:800}
+    .cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    @media(max-width:900px){.grid-3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="logo.png" alt="logo">FactuPro</a>
+      <div class="links" id="navLinks">
+        <a href="index.html">Accueil</a>
+        <a href="factures.html">Factures</a>
+        <a class="active" href="abonnements.html">Abonnements</a>
+        <a href="parametres.html">Paramètres</a>
+        <a class="cta" href="factures.html">Créer</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container hero">
+    <h1>Des plans simples pour grandir</h1>
+    <p class="lead">Commence gratuitement. Passe à Pro quand tu veux.</p>
+
+    <section class="grid-3">
+      <div class="card">
+        <span class="badge">Gratuit</span>
+        <h3>Essentiel</h3>
+        <div class="price">0 € / mois</div>
+        <ul class="list">
+          <li><span class="ok">✔</span> Devis & factures illimités (brouillons)</li>
+          <li><span class="ok">✔</span> PDF propres avec votre logo</li>
+          <li><span class="ok">✔</span> TVA, remises, acomptes</li>
+          <li>✖ Paiements & relances auto</li>
+        </ul>
+        <a class="btn" href="factures.html">Démarrer gratuitement</a>
+      </div>
+
+      <div class="card" style="border-image:linear-gradient(45deg,var(--primary),var(--primary-2)) 1;border-width:1px;border-style:solid">
+        <span class="badge" style="background:rgba(6,182,212,.15);border-color:rgba(6,182,212,.3);color:#a5f3fc">Recommandé</span>
+        <h3>Pro</h3>
+        <div class="price">9 € / mois</div>
+        <ul class="list">
+          <li><span class="ok">✔</span> Tout l’Essentiel</li>
+          <li><span class="ok">✔</span> Paiements & encaissements rapides</li>
+          <li><span class="ok">✔</span> Relances automatiques</li>
+          <li><span class="ok">✔</span> Historique illimité</li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn primary" href="parametres.html">Choisir Pro</a>
+          <a class="btn" href="factures.html">Essayer d’abord</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="badge">Équipe</span>
+        <h3>Business</h3>
+        <div class="price">29 € / mois</div>
+        <ul class="list">
+          <li><span class="ok">✔</span> Multi-utilisateurs & rôles</li>
+          <li><span class="ok">✔</span> Accès expert-comptable</li>
+          <li><span class="ok">✔</span> Catégories & lots travaux</li>
+          <li><span class="ok">✔</span> Support prioritaire 7j/7</li>
+        </ul>
+        <a class="btn primary" href="parametres.html">Passer en Business</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

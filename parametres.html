@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paramètres — FactuPro</title>
+  <link rel="icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0e1117;--card:#151A23;--text:#e5e7eb;--muted:#9aa4b2;--primary:#4f46e5;--primary-2:#06b6d4}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:900px;margin:0 auto;padding:0 20px}
+    .nav{position:sticky;top:0;background:linear-gradient(135deg, rgba(79,70,229,.15), rgba(6,182,212,.10));border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px}
+    .brand img{width:36px;height:36px;border-radius:12px}
+    .links{display:flex;gap:18px;font-weight:600}
+    .cta{padding:8px 14px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff}
+    h1{font-size:28px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin:18px 0}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
+    label{display:block;margin:12px 0 6px;color:#c7cbd3}
+    input,select,textarea{width:100%;padding:12px;border-radius:12px;background:#0d1219;border:1px solid rgba(255,255,255,.08);color:var(--text)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{margin-top:14px;display:inline-flex;gap:10px;align-items:center;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));border:none;color:#fff;font-weight:600;cursor:pointer}
+    .muted{color:var(--muted)}
+    @media(max-width:800px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="logo.png" alt="logo">FactuPro</a>
+      <div class="links">
+        <a href="index.html">Accueil</a>
+        <a href="factures.html">Factures</a>
+        <a href="abonnements.html">Abonnements</a>
+        <a class="cta" href="factures.html">Créer</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding:24px 0 36px">
+    <h1>Paramètres du compte</h1>
+    <p class="muted">Ces informations sont stockées <b>localement dans ton navigateur</b> (pas de serveur). Elles sont automatiquement reprises dans tes devis & factures.</p>
+
+    <section class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 6px">Identité & Société</h3>
+        <div class="row">
+          <div>
+            <label>Nom complet</label>
+            <input id="fullName" placeholder="Ex : Jean Martin">
+          </div>
+          <div>
+            <label>E‑mail</label>
+            <input id="email" placeholder="exemple@domaine.fr">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Nom de l’entreprise</label>
+            <input id="company" placeholder="Ex : JM Maçonnerie">
+          </div>
+          <div>
+            <label>SIREN / SIRET</label>
+            <input id="siret" placeholder="Ex : 123 456 789 00012">
+          </div>
+        </div>
+        <label>Adresse</label>
+        <textarea id="address" rows="3" placeholder="N°, Rue, Code postal, Ville"></textarea>
+        <div class="row">
+          <div>
+            <label>TVA (%) par défaut</label>
+            <input id="vat" type="number" step="0.01" placeholder="20">
+          </div>
+          <div>
+            <label>Conditions de paiement (jours)</label>
+            <input id="terms" type="number" placeholder="30">
+          </div>
+        </div>
+        <button class="btn" id="save">💾 Enregistrer</button>
+        <button class="btn" id="reset" style="background:linear-gradient(135deg,#374151,#111827);margin-left:8px">🗑️ Réinitialiser</button>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">Sécurité</h3>
+        <p class="muted">Définis un mot de passe local pour verrouiller l’accès sur cet appareil.</p>
+        <div class="row">
+          <div>
+            <label>Nouveau mot de passe</label>
+            <input id="pwd1" type="password" placeholder="●●●●●●●●">
+          </div>
+          <div>
+            <label>Confirmer</label>
+            <input id="pwd2" type="password" placeholder="●●●●●●●●">
+          </div>
+        </div>
+        <button class="btn" id="setPwd">🔐 Activer le verrou local</button>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">Export & sauvegarde</h3>
+        <p class="muted">Exporte/importe tes réglages pour les retrouver sur un autre appareil.</p>
+        <div class="row">
+          <button class="btn" id="exportBtn">⬇️ Exporter les paramètres</button>
+          <label class="btn" style="cursor:pointer">
+            ⬆️ Importer un fichier
+            <input id="importFile" type="file" accept="application/json" style="display:none">
+          </label>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const KEY='factupro.settings';
+    const PWD='factupro.lock';
+    const $=id=>document.getElementById(id);
+    const fields=['fullName','email','company','siret','address','vat','terms'];
+
+    function load(){
+      try{
+        const data=JSON.parse(localStorage.getItem(KEY)||'{}');
+        fields.forEach(f=>{ if(data[f]!==undefined) $(f).value=data[f]; });
+      }catch(e){console.warn(e)}
+    }
+    function save(){
+      const data={}; fields.forEach(f=>data[f]=$(f).value);
+      localStorage.setItem(KEY,JSON.stringify(data));
+      alert('Paramètres enregistrés ✔️');
+    }
+    function reset(){
+      if(confirm('Réinitialiser tous les paramètres locaux ?')){
+        localStorage.removeItem(KEY);
+        load();
+        alert('Paramètres réinitialisés.');
+      }
+    }
+    function setPwd(){
+      const p1=$('pwd1').value, p2=$('pwd2').value;
+      if(!p1 || p1!==p2){ alert('Les mots de passe ne correspondent pas.'); return; }
+      localStorage.setItem(PWD,btoa(p1));
+      alert('Verrou local activé ✅');
+    }
+    function exportSettings(){
+      const blob = new Blob([localStorage.getItem(KEY)||'{}'],{type:'application/json'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='factupro-settings.json'; a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    $('importFile').addEventListener('change',e=>{
+      const file=e.target.files[0]; if(!file) return;
+      const rd=new FileReader();
+      rd.onload=()=>{ localStorage.setItem(KEY,rd.result); load(); alert('Import terminé 👍'); };
+      rd.readAsText(file);
+    });
+
+    $('save').onclick=save;
+    $('reset').onclick=reset;
+    $('setPwd').onclick=setPwd;
+    $('exportBtn').onclick=exportSettings;
+
+    load();
+  </script>
+</body>
+</html>

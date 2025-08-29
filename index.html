@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FactuPro — Devis & Factures modernes</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e1117;
+      --card:#151A23;
+      --muted:#9aa4b2;
+      --primary:#4f46e5; /* indigo-600 */
+      --primary-2:#06b6d4; /* cyan-500 */
+      --ring:rgba(79,70,229,.35);
+      --ok:#10b981;
+      --danger:#ef4444;
+      --text:#e5e7eb;
+      --text-2:#c7cbd3;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    /* NAV */
+    .nav{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);
+         background:linear-gradient(135deg, rgba(79,70,229,.15), rgba(6,182,212,.10));border-bottom:1px solid rgba(255,255,255,.06);z-index:50}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px}
+    .brand img{width:36px;height:36px;border-radius:12px;box-shadow:0 4px 18px rgba(6,182,212,.35)}
+    .links{display:flex;align-items:center;gap:22px;font-weight:600}
+    .links a{opacity:.85}
+    .links a.active,.links a:hover{opacity:1}
+    .cta{padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));
+         color:#fff;box-shadow:0 8px 30px rgba(6,182,212,.35)}
+    .menu{display:none;cursor:pointer;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+    /* HERO */
+    .hero{padding:64px 0 24px;background:
+      radial-gradient(1200px 600px at 80% -200px, rgba(79,70,229,.25), transparent 60%),
+      radial-gradient(800px 500px at -100px -200px, rgba(6,182,212,.20), transparent 60%);}
+    .hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center}
+    h1{font-size:44px;line-height:1.1;margin:0 0 14px}
+    .lead{color:var(--text-2);font-size:18px}
+    .hero-card{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:10px;border-radius:12px;padding:12px 18px;font-weight:600;border:1px solid rgba(255,255,255,.1)}
+    .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border:none;color:#fff}
+    .trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:14px}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,.12);color:#bbf7d0;border:1px solid rgba(16,185,129,.2);padding:8px 12px;border-radius:999px;font-weight:600}
+    /* CARDS */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:36px 0 14px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:18px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+    .card h3{margin:2px 0 8px;font-size:20px}
+    .muted{color:var(--text-2)}
+    .icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+      background:linear-gradient(135deg,rgba(79,70,229,.25),rgba(6,182,212,.25));margin-bottom:8px}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+    .kpis div{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:12px;text-align:center}
+    .kpis .num{font-weight:700;font-size:22px}
+    /* PRICING TEASER */
+    .teaser{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0}
+    .tier{padding:18px;border-radius:18px;border:1px dashed rgba(255,255,255,.12);background:rgba(255,255,255,.02)}
+    .tier h4{margin:0 0 6px}
+    .tier ul{margin:8px 0 0;padding-left:18px;color:var(--text-2)}
+    /* FOOTER */
+    footer{margin-top:40px;border-top:1px solid rgba(255,255,255,.08);padding:28px 0;color:var(--muted);font-size:14px}
+    footer a{color:var(--text)}
+    /* RESPONSIVE */
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .teaser{grid-template-columns:1fr}
+      .links{display:none}
+      .menu{display:block}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="FactuPro logo">
+        <span>FactuPro</span>
+      </a>
+      <div class="links" id="navLinks">
+        <a href="index.html" class="active">Accueil</a>
+        <a href="factures.html">Factures</a>
+        <a href="abonnements.html">Abonnements</a>
+        <a href="parametres.html">Paramètres</a>
+        <a class="cta" href="factures.html">Créer une facture</a>
+      </div>
+      <div class="menu" id="menuBtn">☰</div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="badge">🚀 Nouveau : export PDF et conversion devis → facture</div>
+        <h1>Créez des <span style="background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">devis</span> & <span style="background:linear-gradient(135deg,var(--primary-2),var(--primary));-webkit-background-clip:text;background-clip:text;color:transparent">factures</span> en quelques secondes</h1>
+        <p class="lead">Des documents conformes, élégants et prêts à envoyer : TVA, remises, acomptes, mentions légales, numérotation automatique et impression PDF.</p>
+        <div class="hero-card">
+          <a class="btn primary" href="factures.html">Commencer maintenant</a>
+          <a class="btn" href="abonnements.html">Découvrir les offres</a>
+        </div>
+        <div class="trust">
+          <span>⭐️⭐️⭐️⭐️⭐️ Utilisé par des artisans, TPE et indépendants</span>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="kpis">
+            <div><div class="num">1 min</div><div class="muted">par facture</div></div>
+            <div><div class="num">-30%</div><div class="muted">d’impayés</div></div>
+            <div><div class="num">∞</div><div class="muted">de documents</div></div>
+          </div>
+          <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="icon">📄</div>
+            <div class="icon">💶</div>
+            <div class="icon">📤</div>
+          </div>
+          <p class="muted" style="margin-top:8px">Générez, envoyez, suivez. Tout est centralisé dans une interface claire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="grid">
+      <div class="card">
+        <div class="icon">🧱</div>
+        <h3>Devis multi-lignes</h3>
+        <p class="muted">Ajoutez matériaux, main d’œuvre, déplacement, TVA réduite… puis transformez en facture en 1 clic.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧾</div>
+        <h3>Factures conformes</h3>
+        <p class="muted">Numérotation auto, mentions légales, acomptes, conditions de paiement et pénalités de retard.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📥</div>
+        <h3>PDF instantané</h3>
+        <p class="muted">Imprimez/partagez un PDF propre et pro depuis votre mobile ou ordinateur.</p>
+      </div>
+    </div>
+
+    <div class="teaser">
+      <div class="tier">
+        <h4>Gratuit</h4>
+        <p class="muted">Idéal pour démarrer : devis & factures illimités, export PDF et sauvegarde locale.</p>
+        <ul>
+          <li>Devis → Facture</li>
+          <li>TVA, remises, acomptes</li>
+          <li>Design épuré</li>
+        </ul>
+        <p style="margin-top:10px"><a class="btn primary" href="factures.html">Essayer gratuitement</a></p>
+      </div>
+      <div class="tier">
+        <h4>Pro (bientôt)</h4>
+        <p class="muted">Synchronisation multi‑appareils, historique, modèles de documents, assistance prioritaire.</p>
+        <ul>
+          <li>Sauvegarde cloud</li>
+          <li>Plusieurs modèles</li>
+          <li>Support prioritaire</li>
+        </ul>
+        <p style="margin-top:10px"><a class="btn" href="abonnements.html">Voir les offres</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap">
+      <div>© <span id="y"></span> FactuPro. Tous droits réservés.</div>
+      <div style="display:flex;gap:16px">
+        <a href="abonnements.html">Abonnements</a>
+        <a href="parametres.html">Paramètres</a>
+        <a href="factures.html">Créer une facture</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const btn = document.getElementById('menuBtn');
+    const links = document.getElementById('navLinks');
+    btn?.addEventListener('click',()=>{
+      const visible = getComputedStyle(links).display !== 'none';
+      links.style.display = visible ? 'none' : 'flex';
+      links.style.flexDirection = 'column';
+      links.style.background = 'rgba(21,26,35,.98)';
+      links.style.position='absolute';
+      links.style.top='58px'; links.style.right='20px';
+      links.style.padding='14px'; links.style.border='1px solid rgba(255,255,255,.08)';
+      links.style.borderRadius='14px';
+    });
+  </script>
+</body>
+</html>
