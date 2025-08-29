@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FactuPro — Paramètres</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f8fb;color:#0f172a}
+header,main{max-width:1000px;margin:0 auto;padding:16px}
+nav{display:flex;gap:10px;justify-content:flex-end}
+a.btn{background:#e2e8f0;color:#0f172a;border-radius:12px;padding:10px 14px;text-decoration:none;font-weight:700}
+.card{background:#fff;border-radius:14px;border:1px solid #e2e8f0;padding:16px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+label{font-weight:700}
+input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;margin:6px 0 12px}
+button{background:#0ea5e9;color:#fff;border:none;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:800}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a class="btn" href="index.html">Accueil</a>
+    <a class="btn" href="factures.html">Factures</a>
+    <a class="btn" href="abonnements.html">Abonnements</a>
+  </nav>
+</header>
+<main class="card">
+  <h1>⚙️ Paramètres (démo locale)</h1>
+  <div class="grid">
+    <div class="card">
+      <h3>Créer un compte</h3>
+      <label>Email</label><input id="regEmail" type="email" placeholder="email@exemple.com">
+      <label>Mot de passe</label><input id="regPass" type="password" placeholder="6+ caractères">
+      <button onclick="register()">Créer mon compte</button>
+    </div>
+    <div class="card">
+      <h3>Connexion</h3>
+      <label>Email</label><input id="logEmail" type="email">
+      <label>Mot de passe</label><input id="logPass" type="password">
+      <button onclick="login()">Se connecter</button>
+      <button onclick="logout()" style="background:#e11d48">Se déconnecter</button>
+    </div>
+  </div>
+  <p style="color:#64748b">Les données restent uniquement dans votre navigateur (localStorage).</p>
+</main>
+<script>
+async function sha256(str){
+  const buf=new TextEncoder().encode(str);
+  const hash=await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function register(){
+  const email=document.getElementById('regEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('regPass').value;
+  if(!email||pass.length<6){ alert('Email valide et mot de passe (6+).'); return; }
+  const users=JSON.parse(localStorage.getItem('fp.users')||'{}');
+  if(users[email]){ alert('Compte déjà existant.'); return; }
+  users[email]={hash:await sha256(pass)}; localStorage.setItem('fp.users', JSON.stringify(users));
+  alert('Compte créé (local).');
+}
+async function login(){
+  const email=document.getElementById('logEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('logPass').value;
+  const users=JSON.parse(localStorage.getItem('fp.users')||'{}');
+  if(!users[email]){ alert('Compte introuvable.'); return; }
+  const ok=(await sha256(pass))===users[email].hash;
+  alert(ok?'Connecté.':'Mot de passe incorrect.');
+}
+function logout(){ localStorage.removeItem('fp.session'); alert('Déconnecté.'); }
+</script>
+</body>
+</html>

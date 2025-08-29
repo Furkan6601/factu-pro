@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FactuPro — Factures</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f8fb;color:#0f172a}
+header,main{max-width:1000px;margin:0 auto;padding:16px}
+nav{display:flex;gap:10px;justify-content:flex-end}
+a.btn,button.btn{background:#0ea5e9;color:#fff;border:none;border-radius:12px;padding:10px 14px;text-decoration:none;font-weight:700;cursor:pointer}
+a.muted{background:#e2e8f0;color:#0f172a}
+.card{background:#fff;border-radius:14px;border:1px solid #e2e8f0;padding:16px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border-bottom:1px solid #e2e8f0;padding:8px;text-align:left}
+.right{text-align:right}
+input,textarea,select{width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:10px}
+.tot{font-weight:800}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a class="btn muted" href="index.html">Accueil</a>
+    <a class="btn" href="factures.html">Factures</a>
+    <a class="btn muted" href="abonnements.html">Abonnements</a>
+    <a class="btn muted" href="parametres.html">Paramètres</a>
+  </nav>
+</header>
+<main class="card">
+  <h1>🧾 Devis & Factures</h1>
+  <div class="grid">
+    <div>
+      <label>Type</label>
+      <select id="docType"><option value="devis">Devis</option><option value="facture">Facture</option></select>
+      <label>Numéro</label><input id="docNo" placeholder="2025-00001">
+      <label>Date</label><input id="docDate" type="date">
+      <label>Client (Nom / Société)</label><input id="client">
+      <label>Adresse client</label><textarea id="addr" rows="3"></textarea>
+    </div>
+    <div>
+      <label>TVA par défaut (%)</label><input id="vatDefault" type="number" value="20" step="0.1">
+      <label>Objet</label><input id="title" placeholder="Travaux — Dalle béton">
+      <label>Acompte (€)</label><input id="deposit" type="number" value="0" step="0.01">
+      <label>Notes</label><textarea id="notes" rows="3" placeholder="Règlement à 30 jours..."></textarea>
+    </div>
+  </div>
+
+  <h3>🧰 Lignes</h3>
+  <table id="lines">
+    <thead><tr><th>Désignation</th><th class="right">Qté</th><th class="right">PU HT</th><th class="right">TVA %</th><th class="right">Remise</th><th class="right">Total HT</th><th></th></tr></thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr><td colspan="5" class="right">Sous-total HT</td><td class="right tot" id="sum_ht">0,00 €</td><td></td></tr>
+      <tr><td colspan="5" class="right">Total TVA</td><td class="right tot" id="sum_vat">0,00 €</td><td></td></tr>
+      <tr><td colspan="5" class="right">Total TTC</td><td class="right tot" id="sum_ttc">0,00 €</td><td></td></tr>
+    </tfoot>
+  </table>
+  <p style="text-align:right;margin-top:10px">
+    <button class="btn" id="add">+ Ajouter une ligne</button>
+    <button class="btn" onclick="window.print()">🖨️ Imprimer / PDF</button>
+    <button class="btn" onclick="save()">💾 Enregistrer</button>
+  </p>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+function today(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+$('#docDate').value=today();
+
+function addRow(line={desc:'Prestation',qty:1,price:50,vat:parseFloat($('#vatDefault').value||'20'),discount:0}){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input class="desc" value="${line.desc}"></td>
+    <td class="right"><input class="qty" type="number" step="0.01" value="${line.qty}"></td>
+    <td class="right"><input class="price" type="number" step="0.01" value="${line.price}"></td>
+    <td class="right"><input class="vat" type="number" step="0.1" value="${line.vat}"></td>
+    <td class="right"><input class="discount" type="number" step="0.01" value="${line.discount}"></td>
+    <td class="right"><span class="total">0,00 €</span></td>
+    <td class="right"><button class="btn muted del">x</button></td>`;
+  $('#lines tbody').appendChild(tr);
+  tr.querySelectorAll('input').forEach(i=> i.addEventListener('input', calc));
+  tr.querySelector('.del').addEventListener('click', ()=>{tr.remove(); calc();});
+  calc();
+}
+document.getElementById('add').addEventListener('click', ()=> addRow());
+
+function fmt(n){return (Number(n)||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
+function calc(){
+  let sHT=0,sVAT=0;
+  document.querySelectorAll('#lines tbody tr').forEach(tr=>{
+    const qty=parseFloat(tr.querySelector('.qty').value||'0');
+    const price=parseFloat(tr.querySelector('.price').value||'0');
+    const vat=parseFloat(tr.querySelector('.vat').value||'0');
+    const discount=parseFloat(tr.querySelector('.discount').value||'0');
+    const ht=Math.max(0, qty*price-discount);
+    sHT+=ht; sVAT+=ht*vat/100;
+    tr.querySelector('.total').textContent=fmt(ht);
+  });
+  $('#sum_ht').textContent=fmt(sHT);
+  $('#sum_vat').textContent=fmt(sVAT);
+  const deposit=parseFloat($('#deposit').value||'0');
+  $('#sum_ttc').textContent=fmt(Math.max(0,sHT+sVAT-deposit));
+}
+['vatDefault','deposit','title','client','addr','notes','docNo','docType'].forEach(id=>{
+  const el=document.getElementById(id); if(el) el.addEventListener('input', calc);
+});
+addRow();
+
+function save(){
+  const data = {
+    type:$('#docType').value,no:$('#docNo').value,date:$('#docDate').value,title:$('#title').value,
+    client:$('#client').value,addr:$('#addr').value,vatDefault:$('#vatDefault').value,
+    deposit:$('#deposit').value,notes:$('#notes').value,
+    lines:[...document.querySelectorAll('#lines tbody tr')].map(tr=>({
+      desc:tr.querySelector('.desc').value,
+      qty:parseFloat(tr.querySelector('.qty').value||'0'),
+      price:parseFloat(tr.querySelector('.price').value||'0'),
+      vat:parseFloat(tr.querySelector('.vat').value||'0'),
+      discount:parseFloat(tr.querySelector('.discount').value||'0')
+    }))
+  };
+  const list=JSON.parse(localStorage.getItem('fp.docs')||'[]');list.unshift(data);
+  localStorage.setItem('fp.docs', JSON.stringify(list));
+  alert('Document enregistré dans le navigateur.');
+}
+</script>
+</body>
+</html>
