@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FactuPro - Accueil</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1d3557, #457b9d);
+      color: #fff;
+      text-align: center;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+    }
+    header svg {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #fff;
+      color: #333;
+      border-radius: 10px;
+      padding: 30px;
+      width: 250px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+    }
+    .card h2 {
+      margin: 0 0 15px 0;
+      color: #1d3557;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Logo SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#f1faee">
+      <path d="M12 0L15.09 8H24L17.45 12.97L20.18 21.99L12 17.26L3.82 21.99L6.55 12.97L0 8H8.91L12 0Z"/>
+    </svg>
+    <h1>FactuPro</h1>
+  </header>
+
+  <div class="container">
+    <p>Bienvenue sur <strong>FactuPro</strong>, votre générateur de factures et devis moderne !</p>
+
+    <div class="options">
+      <div class="card" onclick="alert('Page Factures bientôt disponible !')">
+        <h2>🧾 Factures & Devis</h2>
+        <p>Créez vos devis et factures professionnels en quelques clics.</p>
+      </div>
+      <div class="card" onclick="alert('Page Abonnements bientôt disponible !')">
+        <h2>💳 Abonnements</h2>
+        <p>Choisissez une formule adaptée à vos besoins.</p>
+      </div>
+      <div class="card" onclick="alert('Page Paramètres bientôt disponible !')">
+        <h2>⚙️ Paramètres</h2>
+        <p>Gérez vos informations, adresses mail et mots de passe.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 FactuPro. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>
