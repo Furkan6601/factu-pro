@@ -1,0 +1,320 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FactuPro — Devis & Factures</title>
+<style>
+:root{ --brand1:#0ea5e9; --brand2:#6366f1; --bg:#f6f8fb; --text:#0f172a; --mut:#64748b; }
+*{box-sizing:border-box} html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+a{color:var(--brand2);text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{background:radial-gradient(1200px 300px at 50% -50%, rgba(14,165,233,.25), transparent),linear-gradient(#fff,#eef2f7)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo svg{width:36px;height:36px}
+.btn{display:inline-block;padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:800}
+.btn.brand{background:linear-gradient(90deg,var(--brand1),var(--brand2));color:#fff;box-shadow:0 10px 24px rgba(2,6,23,.15)}
+.btn.ghost{background:#e2e8f0}
+.btn.link{background:transparent;color:var(--brand2)}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 10px 25px rgba(2,6,23,.06);padding:18px}
+.grid{display:grid;gap:16px} .grid-2{grid-template-columns:repeat(2,1fr)} .grid-3{grid-template-columns:repeat(3,1fr)}
+.hero{padding:36px 0 24px} .hero h1{margin:0 0 10px;font-size:34px} .hero p{color:#475569;margin:0 0 16px}
+.section{display:none} .section.active{display:block}
+h2{margin:6px 0 12px}
+table{width:100%;border-collapse:collapse} th,td{border-bottom:1px solid #e2e8f0;padding:8px;text-align:left} .right{text-align:right}
+input,textarea,select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
+hr.soft{border:none;border-top:1px solid #e2e8f0;margin:16px 0}
+.badge{display:inline-block;padding:4px 8px;background:#ecfeff;color:#0e7490;border-radius:999px;font-weight:800;font-size:12px}
+.kicker{background:#ecfeff;color:#0e7490;padding:6px 10px;border-radius:999px;display:inline-flex;gap:8px;align-items:center;font-weight:800}
+@media(max-width:900px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+footer{padding:24px 20px;color:#64748b;text-align:center}
+.small{font-size:12px;color:#64748b}
+</style>
+</head>
+<body>
+<header>
+  <nav class="container">
+    <div class="logo">
+      <!-- Logo SVG inline -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="logo">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs>
+        <rect x="1.5" y="1.5" width="21" height="21" rx="5" fill="url(#g)"/>
+        <path d="M8 6h5a3 3 0 110 6H8V6zm0 7h6a3 3 0 110 6H8v-6z" fill="#fff" opacity=".95"/>
+      </svg>
+      <strong>FactuPro</strong>
+    </div>
+    <div>
+      <button class="btn link" data-route="home">Accueil</button>
+      <button class="btn link" data-route="billing">Factures</button>
+      <button class="btn link" data-route="pricing">Abonnements</button>
+      <button class="btn link" data-route="account">Paramètres</button>
+    </div>
+  </nav>
+  <div class="container hero section active" id="home">
+    <span class="badge">Démo — 100% sur votre appareil (local)</span>
+    <h1>Créez des devis et factures pros en quelques secondes</h1>
+    <p>Simple, moderne et rapide. Pas besoin de compte pour tester.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn brand" data-route="billing">Créer un devis / facture</button>
+      <button class="btn ghost" data-route="pricing">Voir les abonnements</button>
+    </div>
+    <hr class="soft">
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>Rapide</h3>
+        <p class="small">Ajoutez des lignes, la TVA et obtenez les totaux instantanément.</p>
+      </div>
+      <div class="card">
+        <h3>Professionnel</h3>
+        <p class="small">Mise en page claire. Impression / PDF via le navigateur.</p>
+      </div>
+      <div class="card">
+        <h3>Privé</h3>
+        <p class="small">Vos données restent dans votre navigateur (localStorage).</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- FACTURATION -->
+  <section class="section" id="billing">
+    <h2>🧾 Devis & Factures</h2>
+    <div class="card" style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+      <span class="kicker">TVA par défaut&nbsp;:&nbsp;<input id="defaultVat" type="number" value="20" step="0.1" style="width:80px"> %</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" onclick="window.print()">🖨️ Imprimer / PDF</button>
+        <button class="btn brand" onclick="saveDoc()">💾 Enregistrer</button>
+      </div>
+    </div>
+
+    <div class="grid grid-2 card" style="margin-top:12px">
+      <div>
+        <h3>Client</h3>
+        <label>Nom / Société</label><input id="clientName">
+        <label>Adresse</label><textarea id="clientAddr" rows="4"></textarea>
+        <div class="grid grid-2">
+          <div><label>Type</label><select id="docType"><option value="devis">Devis</option><option value="facture">Facture</option></select></div>
+          <div><label>N° (auto si vide)</label><input id="docNo" placeholder="2025-00001"></div>
+        </div>
+        <div class="grid grid-2">
+          <div><label>Date</label><input id="docDate" type="date"></div>
+          <div><label>Objet</label><input id="docTitle" placeholder="Devis maçonnerie – dalle béton"></div>
+        </div>
+      </div>
+      <div>
+        <h3>Votre entreprise</h3>
+        <label>Nom</label><input id="bizName" placeholder="FactuPro Démo">
+        <label>Adresse</label><textarea id="bizAddr" rows="4" placeholder="Rue, CP Ville, Pays"></textarea>
+        <div class="grid grid-2">
+          <div><label>SIREN/SIRET</label><input id="bizSiret"></div>
+          <div><label>TVA intracom</label><input id="bizVat"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Lignes</h3>
+      <div style="overflow-x:auto">
+        <table id="linesTbl">
+          <thead><tr><th style="width:36%">Désignation</th><th class="right">Qté</th><th class="right">PU HT (€)</th><th class="right">TVA (%)</th><th class="right">Remise (€)</th><th class="right">Total HT</th><th></th></tr></thead>
+          <tbody></tbody>
+          <tfoot>
+            <tr><td colspan="5" class="right">Sous-total HT</td><td class="right" id="sum_ht">0,00 €</td><td></td></tr>
+            <tr><td colspan="5" class="right">Total TVA</td><td class="right" id="sum_vat">0,00 €</td><td></td></tr>
+            <tr><td colspan="5" class="right">Acompte (€)</td><td class="right"><input id="deposit" type="number" step="0.01" value="0"></td><td></td></tr>
+            <tr><td colspan="5" class="right">Total TTC</td><td class="right" id="sum_ttc">0,00 €</td><td></td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+        <button class="btn ghost" id="addRow">+ Ajouter une ligne</button>
+        <button class="btn brand" onclick="saveDoc()">💾 Enregistrer</button>
+      </div>
+      <label>Conditions / Notes</label>
+      <textarea id="notes" rows="3" placeholder="Règlement à 30j. Indemnité 40€ (B2B)."></textarea>
+    </div>
+  </section>
+
+  <!-- ABONNEMENTS -->
+  <section class="section" id="pricing">
+    <h2>💳 Abonnements</h2>
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="badge">Starter</span>
+        <h3>0 € / mois</h3>
+        <ul class="small">
+          <li>Devis & factures illimités (local)</li>
+          <li>Impression / PDF via navigateur</li>
+          <li>1 utilisateur</li>
+        </ul>
+        <button class="btn brand" onclick="selectPlan('Starter')">Choisir Starter</button>
+      </div>
+      <div class="card" style="position:relative">
+        <span class="badge" style="position:absolute;top:-10px;right:16px;background:#10b981;color:#fff">Populaire</span>
+        <span class="badge">Pro</span>
+        <h3>9,90 € / mois</h3>
+        <ul class="small">
+          <li>Tout Starter + thèmes</li>
+          <li>Logo & style PDF</li>
+          <li>Support e‑mail</li>
+        </ul>
+        <button class="btn brand" onclick="selectPlan('Pro')">Choisir Pro</button>
+      </div>
+      <div class="card">
+        <span class="badge">Business</span>
+        <h3>29,90 € / mois</h3>
+        <ul class="small">
+          <li>Multi‑utilisateurs</li>
+          <li>Factures récurrentes</li>
+          <li>Exports CSV</li>
+        </ul>
+        <button class="btn brand" onclick="selectPlan('Business')">Choisir Business</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARAMÈTRES -->
+  <section class="section" id="account">
+    <h2>⚙️ Paramètres (compte local)</h2>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Créer un compte</h3>
+        <label>Email</label><input id="regEmail" type="email" placeholder="email@exemple.com">
+        <label>Mot de passe</label><input id="regPass" type="password" placeholder="6+ caractères">
+        <button class="btn brand" onclick="register()">Créer mon compte</button>
+      </div>
+      <div class="card">
+        <h3>Se connecter</h3>
+        <label>Email</label><input id="logEmail" type="email">
+        <label>Mot de passe</label><input id="logPass" type="password">
+        <button class="btn brand" onclick="login()">Se connecter</button>
+        <button class="btn ghost" onclick="logout()">Se déconnecter</button>
+      </div>
+    </div>
+    <p class="small">Note : c’est une démo locale. Les données restent dans votre navigateur.</p>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> FactuPro — <a href="#" onclick="route('home')">Accueil</a>
+</footer>
+
+<script>
+// Router simple (montre/masque les sections)
+const sections=['home','billing','pricing','account'];
+document.querySelectorAll('[data-route]').forEach(b=>{
+  b.addEventListener('click',()=> route(b.dataset.route));
+});
+function route(name){ sections.forEach(id=> document.getElementById(id).classList.toggle('active', id===name)); window.scrollTo(0,0); }
+route('home');
+
+// Helpers & calcul
+const $=s=>document.querySelector(s);
+const fmt=n=>(Number(n)||0).toLocaleString('fr-FR',{minimumFractionDigits:2, maximumFractionDigits:2})+' €';
+function today(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
+$('#docDate').value=today();
+
+function addRow(line={desc:'Prestation', qty:1, price:50, vat:parseFloat($('#defaultVat').value||'20'), discount:0}){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input class="desc" value="${line.desc}"></td>
+    <td class="right"><input class="qty" type="number" step="0.01" value="${line.qty}"></td>
+    <td class="right"><input class="price" type="number" step="0.01" value="${line.price}"></td>
+    <td class="right"><input class="vat" type="number" step="0.1" value="${line.vat}"></td>
+    <td class="right"><input class="discount" type="number" step="0.01" value="${line.discount}"></td>
+    <td class="right"><span class="total">0,00 €</span></td>
+    <td class="right"><button class="btn ghost del">Supprimer</button></td>`;
+  document.querySelector('#linesTbl tbody').appendChild(tr);
+  tr.querySelectorAll('input').forEach(i=> i.addEventListener('input', recalc));
+  tr.querySelector('.del').addEventListener('click', ()=>{tr.remove(); recalc();});
+  recalc();
+}
+document.getElementById('addRow').addEventListener('click', ()=> addRow());
+
+function getLines(){
+  return [...document.querySelectorAll('#linesTbl tbody tr')].map(tr=>{
+    const g = cls => parseFloat(tr.querySelector('.'+cls).value||'0');
+    return {desc: tr.querySelector('.desc').value, qty: g('qty'), price: g('price'), vat: g('vat'), discount: g('discount')};
+  });
+}
+function recalc(){
+  let sumHT=0, sumVAT=0;
+  document.querySelectorAll('#linesTbl tbody tr').forEach(tr=>{
+    const qty=parseFloat(tr.querySelector('.qty').value||'0');
+    const price=parseFloat(tr.querySelector('.price').value||'0');
+    const vat=parseFloat(tr.querySelector('.vat').value||'0');
+    const discount=parseFloat(tr.querySelector('.discount').value||'0');
+    const ht=Math.max(0, qty*price - discount);
+    const tv=ht*vat/100;
+    sumHT+=ht; sumVAT+=tv;
+    tr.querySelector('.total').textContent=fmt(ht);
+  });
+  const deposit=parseFloat($('#deposit').value||'0');
+  $('#sum_ht').textContent=fmt(sumHT);
+  $('#sum_vat').textContent=fmt(sumVAT);
+  $('#sum_ttc').textContent=fmt(Math.max(0,sumHT+sumVAT-deposit));
+}
+['deposit','docType','docTitle','clientName','clientAddr','bizName','bizAddr','bizSiret','bizVat','docNo','docDate','notes'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', recalc);
+});
+addRow();
+
+function currentDoc(){
+  return {
+    type: $('#docType').value, title: $('#docTitle').value, no: $('#docNo').value, date: $('#docDate').value,
+    clientName: $('#clientName').value, clientAddr: $('#clientAddr').value,
+    bizName: $('#bizName').value, bizAddr: $('#bizAddr').value, bizSiret: $('#bizSiret').value, bizVat: $('#bizVat').value,
+    lines: getLines(), notes: $('#notes').value, deposit: parseFloat($('#deposit').value||'0')
+  };
+}
+
+// Enregistrement local
+function saveDoc(){
+  const d=currentDoc(); const list=JSON.parse(localStorage.getItem('fp.docs')||'[]');
+  if(!d.no){
+    const y=new Date().getFullYear();
+    const count = list.filter(x=> (x.no||'').startsWith(y+'-')).length + 1;
+    d.no = y + '-' + String(count).padStart(5,'0'); $('#docNo').value=d.no;
+  }
+  list.unshift(d); localStorage.setItem('fp.docs', JSON.stringify(list));
+  alert('Document enregistré localement.');
+}
+
+// Pricing (placeholder)
+function selectPlan(name){ alert('Plan sélectionné : '+name+' (démo).'); }
+
+// Auth locale
+async function sha256(str){
+  const buf = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function register(){
+  const email=$('#regEmail').value.trim().toLowerCase();
+  const pass=$('#regPass').value;
+  if(!email || pass.length<6){ alert('Email et mot de passe (6+).'); return; }
+  const users = JSON.parse(localStorage.getItem('fp.users')||'{}');
+  if(users[email]){ alert('Compte déjà existant.'); return; }
+  users[email] = {hash: await sha256(pass)};
+  localStorage.setItem('fp.users', JSON.stringify(users));
+  alert('Compte créé (local).');
+}
+async function login(){
+  const email=$('#logEmail').value.trim().toLowerCase();
+  const pass=$('#logPass').value;
+  const users = JSON.parse(localStorage.getItem('fp.users')||'{}');
+  if(!users[email]){ alert('Compte introuvable.'); return; }
+  const h = await sha256(pass);
+  if(h!==users[email].hash){ alert('Mot de passe incorrect.'); return; }
+  localStorage.setItem('fp.session', JSON.stringify({email}));
+  alert('Connecté.');
+}
+function logout(){ localStorage.removeItem('fp.session'); alert('Déconnecté.'); }
+
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
