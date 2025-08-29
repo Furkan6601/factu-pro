@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FactuPro — Paramètres</title>
+<link rel="icon" href="favicon.ico">
+<style>
+:root{ --brand1:#0ea5e9; --brand2:#6366f1; --bg:#f6f8fb; --text:#0f172a; }
+*{box-sizing:border-box} html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+a{color:var(--brand2);text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{background:linear-gradient( to right, rgba(14,165,233,.15), rgba(99,102,241,.15));border-bottom:1px solid #e2e8f0}
+nav{display:flex;align-items:center;gap:16px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:42px;height:42px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,.12)}
+.brand strong{font-size:18px}
+.nav a{padding:10px 12px;border-radius:10px}
+.nav a.active, .btn{background:linear-gradient(90deg,var(--brand1),var(--brand2));color:#fff}
+.btn{display:inline-block;padding:10px 14px;border-radius:12px;font-weight:800}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 10px 25px rgba(2,6,23,.06);padding:18px}
+.grid{display:grid;gap:16px} .grid-2{grid-template-columns:repeat(2,1fr)} .grid-3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+footer{padding:24px 20px;color:#64748b;text-align:center;border-top:1px solid #e2e8f0;margin-top:40px}
+</style>
+</head>
+<body>
+<header><div class="container">
+  <nav>
+    <div class="brand">
+      <img src="logo.png" alt="FactuPro logo">
+      <strong>FactuPro</strong>
+    </div>
+    <div class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="factures.html">Factures</a>
+      <a href="abonnements.html">Abonnements</a>
+      <a href="parametres.html">Paramètres</a>
+    </div>
+  </nav>
+</div></header>
+<div class="container">
+
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Créer un compte (local)</h2>
+    <label>Email</label><br><input id="regEmail" type="email" placeholder="email@exemple.com"><br><br>
+    <label>Mot de passe</label><br><input id="regPass" type="password" placeholder="6+ caractères"><br><br>
+    <a class="btn" href="#" onclick="register()">Créer mon compte</a>
+  </div>
+  <div class="card">
+    <h2>Connexion</h2>
+    <label>Email</label><br><input id="logEmail" type="email"><br><br>
+    <label>Mot de passe</label><br><input id="logPass" type="password"><br><br>
+    <a class="btn" href="#" onclick="login()">Se connecter</a>
+    <a class="btn" href="#" onclick="logout()" style="background:#e11d48;margin-left:10px">Se déconnecter</a>
+  </div>
+</div>
+<p style="color:#64748b">Démo locale : les données restent uniquement dans votre navigateur.</p>
+<script>
+async function sha256(str){ const buf=new TextEncoder().encode(str); const h=await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+async function register(){ const email=document.getElementById('regEmail').value.trim().toLowerCase(); const pass=document.getElementById('regPass').value;
+  if(!email||pass.length<6){ alert('Email valide et mot de passe (6+).'); return; }
+  const users=JSON.parse(localStorage.getItem('fp.users')||'{}'); if(users[email]){ alert('Compte déjà existant.'); return; }
+  users[email]={hash:await sha256(pass)}; localStorage.setItem('fp.users', JSON.stringify(users)); alert('Compte créé (local).');}
+async function login(){ const email=document.getElementById('logEmail').value.trim().toLowerCase(); const pass=document.getElementById('logPass').value;
+  const users=JSON.parse(localStorage.getItem('fp.users')||'{}'); if(!users[email]){ alert('Compte introuvable.'); return; }
+  const ok=(await sha256(pass))===users[email].hash; alert(ok?'Connecté.':'Mot de passe incorrect.'); }
+function logout(){ localStorage.removeItem('fp.session'); alert('Déconnecté.'); }
+</script>
+</div>
+<footer>© <span id="y"></span> FactuPro</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body></html>
